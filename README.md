@@ -6,7 +6,7 @@ This repo houses data and code for the analyses in the publication "Epigenetic a
 
 # Files
 
-## Datasets
+## Data
 
 The tarball Data.tar.gz contains the following files:
 
@@ -24,7 +24,7 @@ The tarball Data.tar.gz contains the following files:
 
 - `new_files/`: This folder contains the unnormalized pseudobulk counts for each cell type, after pseudobulk-level QC. Also contains metadata for 149 CLUES patients and 49 healthy controls.
 
-## Scripts
+## Code
 
 - `CLUES_bulk.R`: Takes in `cleaned_CLUES_bulkcounts.csv` and `cleaned_CLUES_metadata.csv` as inputs. Calculates SLEDAI correlation with age, normalizes and conducts differential expression analysis using voom, creates a volcano plot, regression plots for genes of interest, and a pathway plot based on GSEA results using fGSEA and the reactome pathways.
 
