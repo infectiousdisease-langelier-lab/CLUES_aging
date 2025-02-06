@@ -31,18 +31,23 @@ gse <- getGEO(GEO = "GSE33828", GSEMatrix = TRUE)
 feature.data <- gse$GSE33828_series_matrix.txt.gz@featureData@data
 feature.data <- feature.data[,c(1,6)]
 
-genex <- expression %>% 
-  rownames_to_column(var = 'ID') %>%
-  inner_join(., feature.data, by = 'ID')
 
-genex <- as.data.frame(genex)
+genex <- as.data.frame(expression)
 
-nams = genex$ILMN_Gene
+nams = genex$V1
 rownames(genex) <- make.names(nams, unique = TRUE)
 genex <- genex[,-c(1)]
+
+genex <- genex %>% 
+  inner_join(., feature.data, by = c('V1' = 'ID'))
+
+
+genex <- dplyr::select(genex, -c("V1"))
+
+rownames(genex) <- make.names(genex$ILMN_Gene, unique = TRUE)
+
+
 genex <- dplyr::select(genex, -c("ILMN_Gene"))
-
-
 # Read metadata -----
 
 
@@ -102,6 +107,8 @@ top_DE$gene_name = rownames(top_DE)
 top_DE$diffexpressed <- "Not significant"
 top_DE$diffexpressed[top_DE$logFC > 0 & top_DE$adj.P.Val < 0.05] <- "Significantly upregulated"
 top_DE$diffexpressed[top_DE$logFC < 0 & top_DE$adj.P.Val < 0.05] <- "Significantly downregulated"
+
+write_csv(top_DE, "RS_control_topTable.csv")
 
 volcano <- ggplot(top_DE, aes(x = logFC, y = -log10(adj.P.Val))) +
   geom_point(aes(color = diffexpressed), size = 0.8) +

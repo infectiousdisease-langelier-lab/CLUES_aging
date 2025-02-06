@@ -20,7 +20,7 @@ setwd("/Users/rithwikn/Documents/CZBiohub_2023/Lupus/")
 
 # Read cleaned genecounts data -----
 counts <- read.csv(
-  "../../cleaned_CLUES_bulkcounts.csv",
+  "./cleaned_CLUES_bulkcounts.csv",
   row.names = 1,
   check.names = FALSE
 )
@@ -28,7 +28,7 @@ counts <- read.csv(
 # Read cleaned metadata -----
 
 cleaned_metadata <- read.csv(
-  "../../cleaned_CLUES_metadata.csv", row.names = 1, check.names = FALSE
+  "./cleaned_CLUES_metadata.csv", row.names = 1, check.names = FALSE
 )
 
 ## Convert categorial variables into factors
@@ -99,6 +99,8 @@ top_DE$Significance <- ifelse(top_DE$adj.P.Val < 0.05, "Significant (FDR < 0.05)
 top_DE$diffexpressed <- "Not significant"
 top_DE$diffexpressed[top_DE$logFC > 0 & top_DE$adj.P.Val < 0.05] <- "Significantly upregulated"
 top_DE$diffexpressed[top_DE$logFC < 0 & top_DE$adj.P.Val < 0.05] <- "Significantly downregulated"
+
+write_csv(top_DE, "bulk_SLE_topTable.csv")
 
 # Volcano plot -----
 

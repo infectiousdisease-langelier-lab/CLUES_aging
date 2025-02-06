@@ -48,14 +48,14 @@ my.theme <- theme_classic() +
 
 ## Define the desired order for Pathway and Cell type 
 
-ct_order <- c("NK", "T4_naive", "T4_EM", "T4_reg", "T8_naive", "B_naive", "B_EM", "ncM", "cM", "cDC")
+ct_order <- c("NK_dim", "NK_bright", "T4_naive", "T4_EM", "T4_reg", "T8_naive", "B_naive", "B_EM", "ncM", "cM", "cDC")
 Pathway_Order <- c("Alpha_beta", "Gamma", "Cytokine_Signaling", "IL-1_Signaling")
 PO <- rev(Pathway_Order)
 
 ## Convert Pathway and CT to factors with the desired order
-CLUES$Pathway <- factor(CLUES$Pathway, levels = PO)
+CLUES$Pathway <- factor(CLUES$Pathway, levels = Pathway_Order)
 CLUES$CT <- factor(CLUES$CT, levels = ct_order)
-RS$Pathway <- factor(RS$Pathway, levels = PO)
+RS$Pathway <- factor(RS$Pathway, levels = Pathway_Order)
 RS$CT <- factor(RS$CT, levels = ct_order)
 
 pathway_CLUES <- ggplot(CLUES, aes(x = CT, y = Pathway, fill = NES, color = Padj < 0.05)) +
@@ -67,13 +67,16 @@ pathway_CLUES <- ggplot(CLUES, aes(x = CT, y = Pathway, fill = NES, color = Padj
     guide = "colorbar"
   ) + 
   scale_color_manual(values = c("transparent", "black")) +
-  ggtitle("CLUES") + my.theme +  
+  ggtitle("SLE") + my.theme +  
   geom_vline(xintercept=seq(1.5, length(unique(CLUES$CT)), 1), 
              lwd=0.5, colour="gray") + 
   geom_hline(yintercept=seq(1.5, length(unique(CLUES$Pathway)), 1), 
              lwd=0.5, colour="gray") +
-  theme(panel.border = element_rect(color = "black", fill = NA, size = 2),
-        plot.margin = margin(1, 1, 1, 1, "cm")) + coord_flip()                                                
+  theme(
+    panel.border = element_rect(color = "black", fill = NA, size = 2),
+    plot.margin = margin(1, 1, 1, 1, "cm"),
+    axis.title.x = element_blank(),             # Remove x-axis title
+    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + coord_flip()                                                
 
 
 pathway_RS <- ggplot(RS, aes(x = CT, y = Pathway, fill = NES, color = Padj < 0.05)) +
@@ -85,13 +88,17 @@ pathway_RS <- ggplot(RS, aes(x = CT, y = Pathway, fill = NES, color = Padj < 0.0
     guide = "colorbar"
   ) + 
   scale_color_manual(values = c("transparent", "black")) +
-  ggtitle("Healthy controls") + my.theme + 
+  ggtitle("Controls") + my.theme + 
   geom_vline(xintercept=seq(1.5, length(unique(CLUES$CT)), 1), 
              lwd=0.5, colour="gray") + 
   geom_hline(yintercept=seq(1.5, length(unique(CLUES$Pathway)), 1), 
              lwd=0.5, colour="gray") +
-  theme(panel.border = element_rect(color = "black", fill = NA, size = 2),
-        plot.margin = margin(1, 1, 1, 1, "cm")) + coord_flip()
+  theme(
+    panel.border = element_rect(color = "black", fill = NA, size = 2),
+    plot.margin = margin(1, 1, 1, 1, "cm"),
+    axis.title.x = element_blank(),             # Remove x-axis title
+    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)  # Make x-axis labels vertical
+  ) + coord_flip()
 
 
 
